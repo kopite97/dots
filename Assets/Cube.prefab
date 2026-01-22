@@ -308,8 +308,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TargetAuthoring
   TargetCategory:
     Category00: 0
-    Category01: 0
-    Category02: 1
+    Category01: 1
+    Category02: 0
     Category03: 0
     Category04: 0
     Category05: 0
@@ -351,9 +351,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb43c6e4db0e41dc81d9c525dc422e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStatusAuthoring
-  MaxHealth: 50
-  AttackRange: 10
-  MoveSpeed: 5
-  AttackSpeed: 1
   BulletPrefab: {fileID: 4877609349045523280, guid: 02dfad3ef26740949ab277219e09aab2, type: 3}
-  BulletSpeed: 10
+  BaseStats: {fileID: 11400000, guid: fb89e88c653f555469397c4e3f5e1304, type: 2}

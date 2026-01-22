@@ -54,6 +54,18 @@ public partial struct UnitShootingSystem : ISystem
                 
                 // B. 총알 생성 (데이터에 들어있는 '내 전용 총알' 을 발사)
                 Entity bullet = ecb.Instantiate(shootingData.ValueRO.BulletPrefab);
+
+                float damageAmount = 10.0f; // 임시 기본값
+
+                if (SystemAPI.HasComponent<UnitData>(unit.Self))
+                {
+                    damageAmount = unit.AttackDamage;
+                }
+
+                ecb.AddComponent(bullet, new BulletDamage
+                {
+                    Value = damageAmount
+                });
                 
                 // C. 위치 설정
                 ecb.SetComponent(bullet, LocalTransform.FromPosition(spawnPos));

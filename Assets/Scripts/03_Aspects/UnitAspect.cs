@@ -2,99 +2,100 @@
 using Unity.Transforms;
 using Unity.Mathematics;
 
-// readonly partial struct로 선언하고 IAspect를 상속받습니다.
+// 1. readonly 필수!
 public readonly partial struct UnitAspect : IAspect
 {
     public readonly Entity Self;
     
-    readonly RefRW<LocalTransform> _transform;
-    readonly RefRW<UnitState> _state;
-    readonly RefRO<Target> _target;         // ★ 타겟 정보 읽기
-    readonly RefRW<AttackTimer> _timer;     // ★ 타이머 관리
-    readonly RefRW<Health> _health;
+    private readonly RefRW<LocalTransform> _transform;
+    private readonly RefRW<UnitState> _state;
+    private readonly RefRO<Target> _target;
+    private readonly RefRW<AttackTimer> _timer;
+    private readonly RefRW<Health> _health;
+    
+    // 2. 필드도 readonly 필수! (내용물 수정은 가능함)
+    private readonly DynamicBuffer<ItemElement> _inventory;
+    
+    private readonly RefRO<UnitData> _unitData;
 
-    // 프로퍼티
+    // ... (프로퍼티들은 그대로 유지) ...
+    public float3 Position => _transform.ValueRO.Position;
     public UnitStateType CurrentState => _state.ValueRO.CurrentState;
+    public float AttackRange => _unitData.ValueRO.Stats.Value.AttackRange;
+    public float MoveSpeed => _unitData.ValueRO.Stats.Value.MoveSpeed;
     public bool HasTarget => _target.ValueRO.TargetEntity != Entity.Null;
     public float TargetDistance => _target.ValueRO.Distance;
-    public float AttackRange => _state.ValueRO.AttackRange;
-    public bool IsAttackReady => _timer.ValueRO.CurrentTime <= 0;
-    public float3 Position => _transform.ValueRO.Position;
-    public bool IsDead => _health.ValueRO.Current <= 0;
     public Entity TargetEntity => _target.ValueRO.TargetEntity;
+    public bool IsDead => _health.ValueRO.Current <= 0;
+    public bool IsAttackReady => _timer.ValueRO.CurrentTime <= 0;
     
-    // 상태 변경
-    public void ChangeState(UnitStateType state)
-    {
-        _state.ValueRW.CurrentState = state;
-    }
+    // 추가하셨어야 할 프로퍼티들 (시스템에서 쓰려면)
+    public float MaxHealth => _unitData.ValueRO.Stats.Value.MaxHealth;
+    public float CurrentHealth => _health.ValueRO.Current;
+    public float AttackDamage => _unitData.ValueRO.Stats.Value.AttackDamage;
+
+    // ... (기본 동작 함수들 그대로 유지) ...
+    public void ChangeState(UnitStateType newState) => _state.ValueRW.CurrentState = newState;
     
-    // 이동(목표 방향으로)
     public void MoveToTarget(float deltaTime)
     {
         if (!HasTarget) return;
-        
-        // 타겟 방향의 계산은 여기서 하지 않고 , FindTargetSystem이 구해준 Distance등을 활용하거나
-        // 간단하게 LookAt처럼 방향만 잡고 전진
-        // *주의: 물리 바디(PhysicsVelocity)를 쓴다면 Velocity를 수정해야 하지만, 
-        // 일단 쉬운 이해를 위해 Transform을 직접 밉니다. (벽 통과 가능성 있음)
-        float moveAmount = _state.ValueRO.MoveSpeed * deltaTime;
+        float moveAmount = MoveSpeed * deltaTime;
         _transform.ValueRW.Position += _transform.ValueRO.Forward() * moveAmount;
     }
-    
-    // 회전 (타겟 바라보기)
+
     public void LookAtTarget(float3 targetPos)
     {
         float3 dir = targetPos - Position;
-        dir.y = 0; // 위아래로는 고개 안 숙임
+        dir.y = 0;
         if (math.lengthsq(dir) > 0.001f)
-        {
             _transform.ValueRW.Rotation = quaternion.LookRotation(math.normalize(dir), math.up());
-            
-        }
     }
-    
-    // 타이머 갱신
-    public void UpdateTime(float deltaTime)
+
+    public void UpdateTimer(float deltaTime)
     {
-        if (_timer.ValueRO.CurrentTime > 0)
-        {
-            _timer.ValueRW.CurrentTime -= deltaTime;
-        }
+        if (_timer.ValueRO.CurrentTime > 0) _timer.ValueRW.CurrentTime -= deltaTime;
     }
-    
-    
-    
-    // 공격 후 쿨타임 리셋 
+
     public void ResetAttackTimer()
     {
         _timer.ValueRW.CurrentTime = _timer.ValueRW.MaxTime;
     }
-    
-    
-    public void TakeDamage(float damage)
+
+    // 3. 인벤토리 로직 (readonly여도 이 코드는 작동합니다)
+    public bool TryConsumePotion()
     {
-        // 이미 죽었으면 무시
-        if (IsDead) return;
+        var buffer = _inventory;
 
-        // 체력 감소
-        _health.ValueRW.Current -= damage;
-
-        // 체력이 0 미만이면 0으로 고정
-        if (_health.ValueRO.Current < 0)
+        for (int i = 0; i < buffer.Length; i++)
         {
-            _health.ValueRW.Current = 0;
+            if (buffer[i].Type == ItemType.HealthPotion && buffer[i].Amount > 0)
+            {
+                var item = buffer[i];
+                item.Amount--;
+
+                buffer[i] = item;
+                if (item.Amount <= 0)
+                {
+                    buffer.RemoveAt(i);
+                }
+                Heal(30.0f);
+                
+                UnityEngine.Debug.Log("물약을 마셨습니다!");
+                return true;
+            }
         }
+
+        return false;
     }
 
     public void Heal(float amount)
     {
         if (IsDead) return;
 
-        _health.ValueRW.Current += amount;
-        if (_health.ValueRO.Current > _health.ValueRO.Max)
-        {
-            _health.ValueRW.Current = _health.ValueRW.Max;
-        }
+        float newHealth = _health.ValueRO.Current + amount;
+        float maxHealth = _unitData.ValueRO.Stats.Value.MaxHealth;
+
+        _health.ValueRW.Current = math.min(newHealth, maxHealth);
     }
 }

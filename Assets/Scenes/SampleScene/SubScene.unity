@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 998979828}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.2878599, z: -0, w: 0.9576726}
-  m_LocalPosition: {x: 0, y: 60, z: 0}
+  m_LocalPosition: {x: 0, y: 150, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerAuthoring
   prefab: {fileID: 2124212898864355653, guid: 7ca90ba4348613c468259e62dd40c310, type: 3}
-  count: 50
+  count: 1000
 --- !u!1 &1157019804
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,12 +529,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb43c6e4db0e41dc81d9c525dc422e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStatusAuthoring
-  MaxHealth: 50000
-  AttackRange: 10
-  MoveSpeed: 5
-  AttackSpeed: 10
   BulletPrefab: {fileID: 4877609349045523280, guid: 9bdc496cb6409ef47ba6c1efe455a2dd, type: 3}
-  BulletSpeed: 2
+  BaseStats: {fileID: 11400000, guid: fcb5bab110a52de42a4f197c98997520, type: 2}
 --- !u!1 &1194327872
 GameObject:
   m_ObjectHideFlags: 0

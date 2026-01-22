@@ -17,7 +17,15 @@ public partial struct UnitBehaviorSystem : ISystem
         foreach (var unit in SystemAPI.Query<UnitAspect>())
         {
             // 0. 공통 : 쿨타임 돌리기
-            unit.UpdateTime(deltaTime);
+            unit.UpdateTimer(deltaTime);
+            
+            // 물약 마시기
+            float maxHp = unit.MaxHealth;
+            float currentHp = unit.CurrentHealth;
+            if (!unit.IsDead && (unit.CurrentHealth / unit.MaxHealth) < 0.5f)
+            {
+                unit.TryConsumePotion();
+            }
             
             // 1. 타겟 유효성 검사 (타겟이 죽었거나 사라졌으면 Idle)
             if (!unit.HasTarget && unit.CurrentState != UnitStateType.Idle)

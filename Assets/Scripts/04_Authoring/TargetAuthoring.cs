@@ -17,7 +17,8 @@ public class TargetAuthoring : MonoBehaviour
             {
                 TargetEntity = Entity.Null, // 초기값: 없음
                 Distance = float.MaxValue,   // 초기값: 아주 멀음
-                TargetLayerMask = authoring.TargetCategory.Value
+                TargetLayerMask = authoring.TargetCategory.Value,
+                NextSearchTime = 0
             });
         }
     }

@@ -17,10 +17,18 @@ public partial struct FindTargetSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+        double currentTime = SystemAPI.Time.ElapsedTime;
+        
+        // 랜덤 생성을 위한 시드값 (프레임마다 다르게)
+        uint seed = (uint)SystemAPI.Time.ElapsedTime * 1000 + 1;
+        var random = Unity.Mathematics.Random.CreateFromIndex(seed);
+        
         
         var job = new FindTargetJob
         {
             CollisionWorld = physicsWorld.CollisionWorld,
+            CurrentTime = currentTime,
+            RandomGen = random
         };
         state.Dependency = job.ScheduleParallel(state.Dependency);
     }
@@ -30,9 +38,23 @@ public partial struct FindTargetSystem : ISystem
 partial struct FindTargetJob : IJobEntity
 {
     [ReadOnly] public CollisionWorld CollisionWorld;
+    public double CurrentTime;
+    public Unity.Mathematics.Random RandomGen;
 
     public void Execute(Entity entity, ref LocalTransform transform, RefRW<Target> target)
     {
+        // 쿨타임 체크
+        if (CurrentTime < target.ValueRO.NextSearchTime && target.ValueRO.TargetEntity != Entity.Null)
+        {
+            // 타겟과의 거리만 갱신 (가벼운 연산)
+            if(target.ValueRO.Distance < float.MaxValue)
+            {
+                // 거리 갱신 로직을 추가할 수도 있지만,
+                // 일단 검색 자체를 스킵해서 성능 아끼기
+                return;
+            }
+        }
+        
         float3 myPosition = transform.Position;
         uint serachMask = target.ValueRO.TargetLayerMask;
 
@@ -75,5 +97,7 @@ partial struct FindTargetJob : IJobEntity
         }
 
         hits.Dispose();
+        float nextDelay = RandomGen.NextFloat(0.5f, 0.7f);
+        target.ValueRW.NextSearchTime = CurrentTime+nextDelay;
     }
 }

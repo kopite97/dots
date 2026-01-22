@@ -31,7 +31,7 @@ public partial struct SpawnerSystem : ISystem
             var random = Unity.Mathematics.Random.CreateFromIndex(1234);
             for (int i = 0; i < instances.Length; i++)
             {
-                var position = random.NextFloat3(new float3(-50, -50, -50), new float3(50, 50, 50));
+                var position = random.NextFloat3(new float3(-50, 1, -50), new float3(50, 50, 50));
                 
                 // "이 엔티티가 태어나면, LocalTransform 값을 이걸로 설정해줘" 라고 예약
                 ecb.SetComponent(instances[i], LocalTransform.FromPosition(position));

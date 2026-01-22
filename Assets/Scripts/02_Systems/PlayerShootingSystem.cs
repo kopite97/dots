@@ -62,6 +62,7 @@ public partial class PlayerShootingSystem : SystemBase
                 float3 dir = math.normalize(diff);
 
                 Entity bullet = ecb.Instantiate(shootingData.ValueRO.BulletPrefab);
+                
                 ecb.SetComponent(bullet, LocalTransform.FromPosition(myPos + dir * 1.0f));
                 ecb.SetComponent(bullet, new PhysicsVelocity
                 {
