@@ -52,7 +52,7 @@ public partial class PlayerShootingSystem : SystemBase
                 float3 targetPos = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity).Position;
                 float3 myPos = transform.ValueRO.Position;
                 float3 diff = targetPos - myPos;
-                // Debug.Log($"거리 : {targetPos} - {myPos} =  {diff}");
+                Debug.Log($"거리 : {targetPos} - {myPos} =  {diff}");
                 
                 if (math.lengthsq(diff) < 0.001f) 
                 {

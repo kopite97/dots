@@ -20,7 +20,7 @@ public partial struct UnitBehaviorSystem : ISystem
             unit.UpdateTime(deltaTime);
             
             // 1. 타겟 유효성 검사 (타겟이 죽었거나 사라졌으면 Idle)
-            if (unit.HasTarget && unit.CurrentState != UnitStateType.Idle)
+            if (!unit.HasTarget && unit.CurrentState != UnitStateType.Idle)
             {
                 unit.ChangeState(UnitStateType.Idle);
                 continue;
@@ -54,6 +54,21 @@ public partial struct UnitBehaviorSystem : ISystem
                             var targetPos = transformLookup[unit.TargetEntity].Position;
                             unit.LookAtTarget(targetPos);
                             unit.MoveToTarget(deltaTime);
+                        }
+                    }
+                    break;
+                case UnitStateType.Attack:
+                    if (unit.TargetDistance > unit.AttackRange)
+                    {
+                        unit.ChangeState((UnitStateType.Move));
+                    }
+                    else
+                    {
+                        // 공격 중이어도 목표를 향하도록
+                        if (transformLookup.HasComponent(unit.TargetEntity))
+                        {
+                            var targetPos = transformLookup[unit.TargetEntity].Position;
+                            unit.LookAtTarget(targetPos);
                         }
                     }
                     break;

@@ -34,6 +34,7 @@ partial struct FindTargetJob : IJobEntity
     public void Execute(Entity entity, ref LocalTransform transform, RefRW<Target> target)
     {
         float3 myPosition = transform.Position;
+        uint serachMask = target.ValueRO.TargetLayerMask;
 
         var input = new PointDistanceInput
         {
@@ -43,17 +44,36 @@ partial struct FindTargetJob : IJobEntity
             Filter = new CollisionFilter
             {
                 BelongsTo = ~0u,       // 나는 모든 그룹에 속한 것으로 처리 (쿼리용)
-                CollidesWith = 1u << 1, // ★ "Category 1" (두 번째 비트)만 감지해라!
+                CollidesWith = serachMask, // ★ "Category 1" (두 번째 비트)만 감지해라!
                 GroupIndex = 0
             }
         };
 
-        if (CollisionWorld.CalculateDistance(input, out DistanceHit hit))
+        NativeList<DistanceHit> hits = new NativeList<DistanceHit>(Allocator.Temp);
+        if (CollisionWorld.CalculateDistance(input,ref hits))
         {
-            // 이제 필터 덕분에 '나(Category 0)'는 아예 감지가 안 됩니다.
-            // 즉, 여기서 잡힌 녀석은 무조건 '적'입니다.
-            target.ValueRW.TargetEntity = hit.Entity;
-            target.ValueRW.Distance = hit.Distance;
+            Entity closesEntity = Entity.Null;
+            float minDistance = float.MaxValue;
+
+            foreach (var hit in hits)
+            {
+                if (hit.Entity == entity) continue;
+
+                if (hit.Distance < minDistance)
+                {
+                    minDistance = hit.Distance;
+                    closesEntity = hit.Entity;
+                }
+            }
+
+            target.ValueRW.TargetEntity = closesEntity;
+            target.ValueRW.Distance = minDistance;
         }
+        else
+        {
+            target.ValueRW.TargetEntity = Entity.Null;
+        }
+
+        hits.Dispose();
     }
 }

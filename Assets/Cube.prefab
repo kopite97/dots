@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4176176899688591380}
   - component: {fileID: 6435753716667666294}
   - component: {fileID: 2350158358203733316}
-  - component: {fileID: 6932023734233794132}
   - component: {fileID: 5031959139855113278}
   - component: {fileID: 7552648070783756780}
   - component: {fileID: 3645103700413594010}
@@ -95,19 +94,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6932023734233794132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2124212898864355653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be72e1670751465485cfc55824f14276, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RotateSpeedAuthoring
-  value: 5
 --- !u!114 &5031959139855113278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +306,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc5d3159875a4cafb6a69c907aa8a748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetAuthoring
+  TargetCategory:
+    Category00: 0
+    Category01: 0
+    Category02: 1
+    Category03: 0
+    Category04: 0
+    Category05: 0
+    Category06: 0
+    Category07: 0
+    Category08: 0
+    Category09: 0
+    Category10: 0
+    Category11: 0
+    Category12: 0
+    Category13: 0
+    Category14: 0
+    Category15: 0
+    Category16: 0
+    Category17: 0
+    Category18: 0
+    Category19: 0
+    Category20: 0
+    Category21: 0
+    Category22: 0
+    Category23: 0
+    Category24: 0
+    Category25: 0
+    Category26: 0
+    Category27: 0
+    Category28: 0
+    Category29: 0
+    Category30: 0
+    Category31: 0
 --- !u!114 &5595056648927924773
 MonoBehaviour:
   m_ObjectHideFlags: 0

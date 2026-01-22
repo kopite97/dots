@@ -1,10 +1,10 @@
 ﻿using Unity.Entities;
+using Unity.Physics.Authoring;
 using UnityEngine;
 
 public class TargetAuthoring : MonoBehaviour
 {
-    // 인스펙터에서 초기값을 볼 필요가 없다면 변수는 없어도 됩니다.
-    
+    public PhysicsCategoryTags TargetCategory;
     class Baker : Baker<TargetAuthoring>
     {
         public override void Bake(TargetAuthoring authoring)
@@ -16,7 +16,8 @@ public class TargetAuthoring : MonoBehaviour
             AddComponent(entity, new Target
             {
                 TargetEntity = Entity.Null, // 초기값: 없음
-                Distance = float.MaxValue   // 초기값: 아주 멀음
+                Distance = float.MaxValue,   // 초기값: 아주 멀음
+                TargetLayerMask = authoring.TargetCategory.Value
             });
         }
     }

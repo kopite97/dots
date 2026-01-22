@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 1157019805}
   - component: {fileID: 1157019811}
   - component: {fileID: 1157019810}
-  - component: {fileID: 1157019812}
   - component: {fileID: 1157019813}
   - component: {fileID: 1157019814}
   m_Layer: 0
@@ -201,8 +200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa7e9b1132a40d6b2a9041b66a4d651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAuthoring
-  Prefab: {fileID: 4877609349045523280, guid: 9bdc496cb6409ef47ba6c1efe455a2dd, type: 3}
-  BulletSpped: 10
 --- !u!23 &1157019807
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -475,19 +472,6 @@ MonoBehaviour:
     Tag05: 0
     Tag06: 0
     Tag07: 0
---- !u!114 &1157019812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1157019804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be72e1670751465485cfc55824f14276, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RotateSpeedAuthoring
-  value: 3
 --- !u!114 &1157019813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,6 +484,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc5d3159875a4cafb6a69c907aa8a748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetAuthoring
+  TargetCategory:
+    Category00: 0
+    Category01: 1
+    Category02: 0
+    Category03: 0
+    Category04: 0
+    Category05: 0
+    Category06: 0
+    Category07: 0
+    Category08: 0
+    Category09: 0
+    Category10: 0
+    Category11: 0
+    Category12: 0
+    Category13: 0
+    Category14: 0
+    Category15: 0
+    Category16: 0
+    Category17: 0
+    Category18: 0
+    Category19: 0
+    Category20: 0
+    Category21: 0
+    Category22: 0
+    Category23: 0
+    Category24: 0
+    Category25: 0
+    Category26: 0
+    Category27: 0
+    Category28: 0
+    Category29: 0
+    Category30: 0
+    Category31: 0
 --- !u!114 &1157019814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,10 +529,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb43c6e4db0e41dc81d9c525dc422e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStatusAuthoring
-  MaxHealth: 100
+  MaxHealth: 50000
   AttackRange: 10
   MoveSpeed: 5
-  AttackSpeed: 1
+  AttackSpeed: 10
+  BulletPrefab: {fileID: 4877609349045523280, guid: 9bdc496cb6409ef47ba6c1efe455a2dd, type: 3}
+  BulletSpeed: 2
 --- !u!1 &1194327872
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,37 +709,37 @@ MonoBehaviour:
       m_Override: 0
       m_Value:
         Category00: 1
-        Category01: 1
-        Category02: 1
-        Category03: 1
-        Category04: 1
-        Category05: 1
-        Category06: 1
-        Category07: 1
-        Category08: 1
-        Category09: 1
-        Category10: 1
-        Category11: 1
-        Category12: 1
-        Category13: 1
-        Category14: 1
-        Category15: 1
-        Category16: 1
-        Category17: 1
-        Category18: 1
-        Category19: 1
-        Category20: 1
-        Category21: 1
-        Category22: 1
-        Category23: 1
-        Category24: 1
-        Category25: 1
-        Category26: 1
-        Category27: 1
-        Category28: 1
-        Category29: 1
-        Category30: 1
-        Category31: 1
+        Category01: 0
+        Category02: 0
+        Category03: 0
+        Category04: 0
+        Category05: 0
+        Category06: 0
+        Category07: 0
+        Category08: 0
+        Category09: 0
+        Category10: 0
+        Category11: 0
+        Category12: 0
+        Category13: 0
+        Category14: 0
+        Category15: 0
+        Category16: 0
+        Category17: 0
+        Category18: 0
+        Category19: 0
+        Category20: 0
+        Category21: 0
+        Category22: 0
+        Category23: 0
+        Category24: 0
+        Category25: 0
+        Category26: 0
+        Category27: 0
+        Category28: 0
+        Category29: 0
+        Category30: 0
+        Category31: 0
     m_CollidesWithCategories:
       m_Override: 0
       m_Value:

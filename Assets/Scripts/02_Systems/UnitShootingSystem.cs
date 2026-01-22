@@ -36,11 +36,21 @@ public partial struct UnitShootingSystem : ISystem
                 float3 myPos = unit.Position;
                 float3 targetPos = transformLookup[targetEntity].Position;
                 
+                // 방향 벡터 구하기
+                float3 diff = targetPos - myPos;
+                float distanceSq = math.lengthsq(diff);
+
+                if (distanceSq < 0.001f)
+                {
+                    // 너무 가깝거나 나 자신임
+                    continue;
+                }
+                
                 // 총구 위치 (몸체에서 살짝 앞/위)
                 float3 spawnPos = myPos + math.normalize(targetPos - myPos) * 1.0f;
                 spawnPos.y = myPos.y; // 높이 보정
 
-                float3 dir = math.normalize(targetPos - myPos);
+                float3 dir = math.normalize(diff);
                 
                 // B. 총알 생성 (데이터에 들어있는 '내 전용 총알' 을 발사)
                 Entity bullet = ecb.Instantiate(shootingData.ValueRO.BulletPrefab);

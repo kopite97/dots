@@ -4,4 +4,5 @@ public struct Target : IComponentData
 {
     public Entity TargetEntity;
     public float Distance;
+    public uint TargetLayerMask;
 }
